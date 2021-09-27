@@ -108,30 +108,21 @@ class Message
 
   def english_string
     #takes a long braille string and converts it into a nested array where layer 1 is broken up by char and layer 2 is b_element
-    range1 = 0..79
-    line_1 = []
-    range1.step(2) {|x| if @msg[x..x+1] != nil ; line_1 << @msg[x..x+1].split ; else ; line_1 << [1] ; end}
-    range2 = 80..159
-    line_2 = []
-    range2.step(2) {|x| if @msg[x..x+1] != nil ; line_2 << @msg[x..x+1].split ; else ; line_2 << [1] ; end}
-    range3 = 160..239
-    line_3 = []
-    range3.step(2) {|x| if @msg[x..x+1] != nil ; line_3 << @msg[x..x+1].split ; else ; line_3 << [1] ; end}
-
     range = 0..@msg.length
-    range.step(2) {|x| if @msg[x..x+1] != nil ; array << @msg[x..x+1].split ; else ; line_1 << [1] ; end}
+    array = []
+    range.step(2) {|x| if @msg[x..x+1] != nil ; array << @msg[x..x+1].split ; else ; array << [1] ; end}
 
+    line_1 = array[0..((@msg.length/2)/3)]
+    line_2 = array[((@msg.length/2)/3)..((@msg.length/2)/3)*2]
+    line_3 = array[((@msg.length/2)/3)*2..((@msg.length/2)/3)*3]
 
-     row_1 = []
-     row_1 << line_1
-     row_1 << line_2
-     row_1 << line_3
-     b_lines_1 = row_1.transpose
-     b_lines_1 = b_lines_1.join(',')
-     b_lines_1 = b_lines_1.gsub(',','')
-     b_lines_1 = b_lines_1.gsub('1','')
-     b_lines_1.scan(/....../)
+    grouped = [line_1] + [line_2] + [line_3]
 
+    grouped.transpose
 
+    grouped = grouped.join(',')
+    grouped = grouped.gsub(',','')
+    grouped = grouped.gsub('1','')
+    grouped.scan(/....../)
   end
 end
