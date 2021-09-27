@@ -13,8 +13,44 @@ class Message
     instance
   end
 
-  def self.braille(input_file)
+  def self.braille(input_file, instance)
     #converts a txt file containing braille into an array of elements where each braille element is equal to one array element. Line breaks are denoted with \. This message is stored in a new object msg.
+    instance = Message.new
+    msg_string = File.read(input_file)
+    msg_string = msg_string.split("\n")
+
+
+    msg_string[0..2].map do |line|
+      i = msg_string.index(line)
+      until i > msg_string.count
+
+        instance.msg << msg_string[i]
+        i += 3
+      end
+    end
+
+    instance.msg = instance.msg.compact.join
+    l = ((instance.msg.length/2)/3)
+    range = 0..(instance.msg.length )
+    array = []
+    range.step(2) {|x| if instance.msg[x..x+1] != nil ; array << instance.msg[x..x+1].split ; else ; array << [1] ; end}
+
+    line_1 = array[0..(l)]
+    line_2 = array[(l)..(l*2)]
+    line_3 = array[(l*2)..(l*3)]
+
+    grouped = [line_1] + [line_2] + [line_3]
+    #grouped = array
+
+
+    grouped = grouped.transpose
+    grouped = grouped.join(',')
+    grouped = grouped.gsub(',','')
+    grouped = grouped.gsub('1','')
+    instance.msg = grouped.scan(/....../)
+
+
+    instance
   end
 
   def braille_string
@@ -27,7 +63,7 @@ class Message
     s_line_3 = ""
     range1.step(6) {|x| s_line_3 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
-    range2 = 234..474
+    range2 = 240..474
     s_line_4 = ""
     range2.step(6) {|x| s_line_4 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
     s_line_5 = ""
@@ -35,7 +71,7 @@ class Message
     s_line_6 = ""
     range2.step(6) {|x| s_line_6 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
-    range3 = 474..714
+    range3 = 480..714
     s_line_7 = ""
     range3.step(6) {|x| s_line_7 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
     s_line_8 = ""
@@ -43,7 +79,7 @@ class Message
     s_line_9 = ""
     range3.step(6) {|x| s_line_9 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
-    range4 = 714..954
+    range4 = 720..954
     s_line_10 = ""
     range4.step(6) {|x| s_line_10 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
     s_line_11 = ""
@@ -52,7 +88,7 @@ class Message
     range4.step(6) {|x| s_line_12 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
 
-    range5 = 954..1194
+    range5 = 960..1194
     s_line_13 = ""
     range5.step(6) {|x| s_line_13 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
     s_line_14 = ""
@@ -61,7 +97,7 @@ class Message
     range5.step(6) {|x| s_line_15 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
 
-    range6 = 1194..1434
+    range6 = 1200..1434
     s_line_16 = ""
     range6.step(6) {|x| s_line_16 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
     s_line_17 = ""
@@ -69,7 +105,7 @@ class Message
     s_line_18 = ""
     range6.step(6) {|x| s_line_18 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
-    range7 = 1434..1674
+    range7 = 1440..1674
     s_line_19 = ""
     range7.step(6) {|x| s_line_19 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
     s_line_20 = ""
@@ -108,21 +144,6 @@ class Message
 
   def english_string
     #takes a long braille string and converts it into a nested array where layer 1 is broken up by char and layer 2 is b_element
-    range = 0..@msg.length
-    array = []
-    range.step(2) {|x| if @msg[x..x+1] != nil ; array << @msg[x..x+1].split ; else ; array << [1] ; end}
 
-    line_1 = array[0..((@msg.length/2)/3)]
-    line_2 = array[((@msg.length/2)/3)..((@msg.length/2)/3)*2]
-    line_3 = array[((@msg.length/2)/3)*2..((@msg.length/2)/3)*3]
-
-    grouped = [line_1] + [line_2] + [line_3]
-
-    grouped.transpose
-
-    grouped = grouped.join(',')
-    grouped = grouped.gsub(',','')
-    grouped = grouped.gsub('1','')
-    grouped.scan(/....../)
   end
 end
