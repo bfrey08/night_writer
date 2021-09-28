@@ -7,7 +7,7 @@ class Message
   def self.english(input_file, instance)
     #converts a txt file containing english to a ruby array of strings. Each string is one character. Line breaks are denoted with ^. this object is stored in a new object msg
     instance = Message.new
-    msg_string = File.read(input_file)
+    msg_string = File.read(input_file).downcase
     instance.msg = msg_string.split("")
     instance.msg
     instance
@@ -16,10 +16,8 @@ class Message
   def self.braille(input_file, instance)
     #converts a txt file containing braille into an array of elements where each braille element is equal to one array element. Line breaks are denoted with \. This message is stored in a new object msg.
     instance = Message.new
-    msg_string = File.read(input_file)
+    msg_string = File.read(input_file).downcase
     msg_string = msg_string.split("\n")
-
-
     msg_string[0..2].map do |line|
       i = msg_string.index(line)
       until i > msg_string.count
@@ -28,7 +26,6 @@ class Message
         i += 3
       end
     end
-
     instance.msg = instance.msg.compact.join
     l = ((instance.msg.length/2)/3)
     range = 0..(instance.msg.length )
@@ -40,15 +37,11 @@ class Message
     line_3 = array[(l*2)..(l*3)]
 
     grouped = [line_1] + [line_2] + [line_3]
-    #grouped = array
-
-
     grouped = grouped.transpose
     grouped = grouped.join(',')
     grouped = grouped.gsub(',','')
     grouped = grouped.gsub('1','')
     instance.msg = grouped.scan(/....../)
-
 
     instance
   end
@@ -87,7 +80,6 @@ class Message
     s_line_12 = ""
     range4.step(6) {|x| s_line_12 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
 
-
     range5 = 960..1194
     s_line_13 = ""
     range5.step(6) {|x| s_line_13 += @translated_msg.join[x..1+x] if @translated_msg.join[x..1+x] != nil}
@@ -95,7 +87,6 @@ class Message
     range5.step(6) {|x| s_line_14 += @translated_msg.join[x+2..3+x] if @translated_msg.join[x+2..3+x] != nil}
     s_line_15 = ""
     range5.step(6) {|x| s_line_15 += @translated_msg.join[x+4..5+x] if @translated_msg.join[x+4..5+x] != nil}
-
 
     range6 = 1200..1434
     s_line_16 = ""
@@ -121,7 +112,6 @@ class Message
     b_line_6 = s_line_16 + "\n" + s_line_17 + "\n" + s_line_18
     b_line_7 = s_line_19 + "\n" + s_line_20 + "\n" + s_line_21
 
-
     if @translated_msg.compact.length <= 40
       b_line_1
     elsif @translated_msg.compact.length > 40 && @translated_msg.compact.length <= 80
@@ -142,8 +132,4 @@ class Message
     end
   end
 
-  def english_string
-    #takes a long braille string and converts it into a nested array where layer 1 is broken up by char and layer 2 is b_element
-
-  end
 end
