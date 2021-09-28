@@ -16,6 +16,4 @@ RSpec.describe NightReader do
     nr = NightReader.new(ARGV[0], ARGV[1])
     expect(nr.braille_msg.translated_msg).to be_a(Array)
   end
-
-
 end
