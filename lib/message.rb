@@ -21,28 +21,11 @@ class Message
     msg_string[0..2].map do |line|
       i = msg_string.index(line)
       until i > msg_string.count
-
         instance.msg << msg_string[i]
         i += 3
       end
     end
-    instance.msg = instance.msg.compact.join
-    l = ((instance.msg.length/2)/3)
-    range = 0..(instance.msg.length )
-    array = []
-    range.step(2) {|x| if instance.msg[x..x+1] != nil ; array << instance.msg[x..x+1].split ; else ; array << [1] ; end}
-
-    line_1 = array[0..(l)]
-    line_2 = array[(l)..(l*2)]
-    line_3 = array[(l*2)..(l*3)]
-
-    grouped = [line_1] + [line_2] + [line_3]
-    grouped = grouped.transpose
-    grouped = grouped.join(',')
-    grouped = grouped.gsub(',','')
-    grouped = grouped.gsub('1','')
-    instance.msg = grouped.scan(/....../)
-
+    instance.english_string
     instance
   end
 
@@ -130,6 +113,24 @@ class Message
       puts "Translation can only accomodate up to 256 characters. Please shorten message"
       exit
     end
+  end
+  def english_string
+    @msg = @msg.compact.join
+    l = ((@msg.length/2)/3)
+    range = 0..(@msg.length )
+    array = []
+    range.step(2) {|x| if @msg[x..x+1] != nil ; array << @msg[x..x+1].split ; else ; array << [1] ; end}
+
+    line_1 = array[0..(l)]
+    line_2 = array[(l)..(l*2)]
+    line_3 = array[(l*2)..(l*3)]
+
+    grouped = [line_1] + [line_2] + [line_3]
+    grouped = grouped.transpose
+    grouped = grouped.join(',')
+    grouped = grouped.gsub(',','')
+    grouped = grouped.gsub('1','')
+    @msg = grouped.scan(/....../)
   end
 
 end
