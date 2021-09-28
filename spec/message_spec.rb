@@ -19,4 +19,11 @@ RSpec.describe Message do
     msg3 = Message.braille(ARGV[0], ARGV[1])
     expect(msg3).to be_an_instance_of(Message)
   end
+  it 'can take in braille and convert it into an array of strings. each string is 1 english letter' do
+    msg1 = Message.new
+    msg1.msg = [[".0"],[".0"],[".0"]],[["00"],["00"],["00"]],[["00"],["00"],["00"]]
+    msg1.english_string
+
+    expect(msg1.english_string).to eq([".0.0.0","000000","000000"])
+  end
 end
